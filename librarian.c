@@ -2,7 +2,7 @@
 #include "book_management.h"
 #include "utility.h"
 #include "library.h"
-int librarian_manu(Book *h)
+int librarian_menu(Book *h,BookList bl)
 {
     int option;
 	do {
@@ -10,24 +10,25 @@ int librarian_manu(Book *h)
 		option = optionChoice();
         switch (option) {
 			case 1:
-                Book newbook;
-				add_book(newbook,h);
+				add_book(h);
 				break;
 			case 2:
 				remove_book(h);
 				break;
 			case 3:
-				search(h);
+				search(h,bl);
 				break;
 			case 4:
 				display(h);
 				break;
 			case 5:
+			printf("Logging out...");
 				break;
 			default:
 				printf("Sorry, the option you entered was invalid, please try again.\n");
+				break;
 		}
 
 	} while (option != 5);
-	return;
+	return 0;
 }

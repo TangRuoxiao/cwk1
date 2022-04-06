@@ -1,28 +1,148 @@
 #include <stdio.h>
+#include<stdlib.h>
 #include "book_management.h"
 #include "utility.h"
 #include "user_management.h"
+#include "librarian.h"
+#include "user.h"
 #define CreateNode(p) p=(Book *)malloc(sizeof(Book));
 #define DeleteNode(p)   free((void *)p);
 
+
+
+int register_(User *hu)
+{
+    User *p;
+    p=(User *)malloc(sizeof(User));
+    printf("Please enter a username: ");
+    scanf("%s",p->username);
+    printf("Please enter a password: ");
+    scanf("%s",p->password);
+    for (User *i=hu; i!=NULL; i=i->next)
+    {
+        if (i->username==p->username)
+        {
+            printf("user already exists.");
+            return 1;
+        }
+    }
+    //加信息
+    p->next=NULL;
+    User *q;
+    q=hu;
+    while (q->next!=NULL)
+    {
+        q=q->next;
+    }
+    q->next=p;
+    printf("\nRegistered library account successfully!\n");
+    return 0;
+}
+
+
+int login(Book *h,User *hu,BookList bl)
+{
+    char username[40],password[40];
+    printf("Please enter a username: ");
+    scanf("%s",&username);
+    printf("Please enter a password: ");
+    scanf("%s",&password);
+    if (username=="librarian"&&password=="librarian")
+    {
+        librarian_menu(h,bl);
+        return 0;
+    }
+    
+    for (User *p=hu; p!=NULL; p=p->next)
+    {
+        if (username==p->username)
+        {
+            user_menu(username,h,hu,bl);
+            return 0;
+        }
+    }
+    printf("\nAccount not found.\n");
+    return 1;
+}
+
+int search(Book *h,BookList bl){
+    int option,year;
+    char author[50],title[50];
+    bl.list = (Book *) malloc(sizeof(Book));
+    bl.length = 0;
+    printf("\nLoading search menu...\n");
+    do {
+		printf("\nPlease choose an option:\n1) Find books by title\n2) Find books by author\n3) Find books by year\n4) Return to previous menu\n Option: ");
+		option = optionChoice();
+        switch (option) {
+			case 1:
+            bl=find_book_by_title(title,h);
+                break;
+			case 2:
+            printf("Please enter author: ");
+            scanf("%s",&author);
+            bl=find_book_by_author(author,h);
+                
+				break;
+			case 3:
+            printf("Please enter year: ");
+            scanf("%d",&year);
+            bl=find_book_by_year(year,h);
+				break;
+			case 4:
+            printf("Returning to the previous menu...\n");
+				break;
+			default:
+				printf("Sorry, the option you entered was invalid, please try again.\n");
+                break;
+        }
+	} while (option != 4);
+    return 0;
+}
+
+int display(Book *h)
+{
+    Book *p;
+    CreateNode(p)
+    printf("ID           Title           Authors           Year           Copies           \n");
+    for (p=h->next;p;p=p->next)
+    {
+        if (p==NULL)
+        {
+            break;
+        }
+        printf("%-12d %-15s %-17s %-14d %-14d\n",p->id,p->title,p->authors,p->year,p->copies);
+    }
+    return 0;
+}
+
 void library_menu() {
 	int option;
-    Book *h;
+    Book *h=NULL;
     CreateNode(h);
-    FILE *fp = fopen("books.txt","r+");
+    FILE *fp = fopen("books.txt","r");
     load_books(fp,h);
+    fclose(fp);
+    BookList bl;
+    bl.list = (Book *) malloc(sizeof(Book));
+    bl.length = 0;
+    FILE *fpu = fopen("users.txt","r+");
+    User *hu=NULL;
+    hu = (User*) malloc(sizeof(User));
+    load_user(fpu,hu);
+
 	do {
 		printf("\nPlease choose an option:\n1) Register an account\n2) Login\n3) Search for books\n4) Display all books\n5) Quit\n Option: ");
 		option = optionChoice();
         switch (option) {
 			case 1:
-				register_();
+				register_(hu);
 				break;
 			case 2:
-				login(h);
+				login(h,hu,bl);
 				break;
 			case 3:
-				search(h);
+				search(h,bl);
 				break;
 			case 4:
 				display(h);
@@ -31,91 +151,17 @@ void library_menu() {
 				break;
 			default:
 				printf("Sorry, the option you entered was invalid, please try again.\n");
+                break;
 		}
 	} while (option != 5);
-    store_books(fp,h);
+    FILE *fpc=fopen("books.txt","w+");
+    store_books(fpc,h);
+    fclose(fpc);
+    FILE *fpuc=fopen("users.txt","w+");
+    store_user(fpuc,hu);
+    fclose(fpuc);
+    free(h);
+    free(hu);
     printf("\nThank you for using the library!\nGoodbye!");
 	return;
-}
-
-int register_()
-{
-    char username,password;
-    scanf("Please enter a username: %s",&username);
-    scanf("Please enter a password: %s",&password);
-    for (size_t i = 0; i < count; i++)
-    {
-        if (username==p->username)
-        {
-            printf("Sorry, registration unsuccessful, the username you entered already exists.");
-            return;
-        }
-    }
-    //加信息
-    printf("Registered library account successfully!");
-    return;
-}
-
-int login(Book *h)
-{
-    char username,password;
-    scanf("Please enter a username: %s",&username);
-    scanf("Please enter a password: %s",&password);
-    if (username="librarian"&&password==librarian)
-    {
-        librarian_manu(h);
-        return;
-    }
-    
-    for (Book *p=h; i < count; i++)
-    {
-        if (username==p->username)
-        {
-            user_manu(username,h);
-            return;
-        }
-    }
-    printf("Account not found.");
-    return;
-}
-
-int search(Book *h){
-    int option,year;
-    char author,title;
-    printf("\nLoading search menu...\n");
-    do {
-		printf("\nPlease choose an option:\n1) Find books by title\n2) Find books by author\n3) Find books by year\n4) Return to previous menu\n Option: ");
-		option = optionChoice();
-        switch (option) {
-			case 1:
-            printf("Please enter year: %d",&year);
-
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
-				break;
-			default:
-				printf("Sorry, the option you entered was invalid, please try again.\n");
-		}
-	} while (option != 4);
-    
-}
-
-int display(Book *h)
-{
-    Book *p;
-    CreateNode(p)
-    printf("ID\tTitle\tAuthors\tyear\tcopies\n");
-    for (p=h->next;p;p=p->next)
-    {
-        if (p=NULL)
-        {
-            break;
-        }
-        printf("%5d%20s%20s%5d%5d\n",p->id,p->title,p->authors,p->year,p->copies);
-    }
-    return;
 }
