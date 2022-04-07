@@ -22,7 +22,7 @@ int librarian_menu(Book *h,BookList bl)
 				display(h);
 				break;
 			case 5:
-			printf("Logging out...");
+			printf("\nLogging out...\n");
 				break;
 			default:
 				printf("Sorry, the option you entered was invalid, please try again.\n");

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include<stdlib.h>
+#include<string.h>
 #include "book_management.h"
 #include "utility.h"
 #include "user_management.h"
@@ -47,7 +48,7 @@ int login(Book *h,User *hu,BookList bl)
     scanf("%s",&username);
     printf("Please enter a password: ");
     scanf("%s",&password);
-    if (username=="librarian"&&password=="librarian")
+    if (strcmp(username, "librarian")==0 && strcmp(password, "librarian")==0)
     {
         librarian_menu(h,bl);
         return 0;
@@ -61,7 +62,7 @@ int login(Book *h,User *hu,BookList bl)
             return 0;
         }
     }
-    printf("\nAccount not found.\n");
+    printf("\nAccount not found or Wrong password.\n");
     return 1;
 }
 
@@ -76,19 +77,50 @@ int search(Book *h,BookList bl){
 		option = optionChoice();
         switch (option) {
 			case 1:
+            printf("Please enter title: ");
+            scanf("%s",&title);
             bl=find_book_by_title(title,h);
+            if (bl.length==0)
+            {
+                printf("\nBook not found\n");
+                break;
+            }
+            printf("ID           Title           Authors           Year           Copies           \n");
+            for (int i = 0; i < bl.length; i++)
+            {
+                printf("%-12d %-15s %-17s %-14d %-14d\n",(bl.list)->id,(bl.list)->title,(bl.list)->authors,(bl.list)->year,(bl.list)->copies);bl.list++;
+            }
                 break;
 			case 2:
             printf("Please enter author: ");
             scanf("%s",&author);
             bl=find_book_by_author(author,h);
-                
-				break;
+                if (bl.length==0)
+            {
+                printf("book not found\n");
+                break;
+            }
+            printf("ID           Title           Authors           Year           Copies           \n");
+            for (int i = 0; i < bl.length; i++)
+            {
+                printf("%-12d %-15s %-17s %-14d %-14d\n",(bl.list)->id,(bl.list)->title,(bl.list)->authors,(bl.list)->year,(bl.list)->copies);bl.list++;
+            }
+                break;
 			case 3:
             printf("Please enter year: ");
             scanf("%d",&year);
             bl=find_book_by_year(year,h);
-				break;
+				if (bl.length==0)
+            {
+                printf("book not found\n");
+                break;
+            }
+            printf("ID           Title           Authors           Year           Copies           \n");
+            for (int i = 0; i < bl.length; i++)
+            {
+                printf("%-12d %-15s %-17s %-14d %-14d\n",(bl.list)->id,(bl.list)->title,(bl.list)->authors,(bl.list)->year,(bl.list)->copies);bl.list++;
+            }
+                break;
 			case 4:
             printf("Returning to the previous menu...\n");
 				break;
@@ -129,14 +161,14 @@ void library_menu() {
     FILE *fpu = fopen("users.txt","r+");
     User *hu=NULL;
     hu = (User*) malloc(sizeof(User));
-    load_user(fpu,hu);
-
+    //load_user(fpu,hu);
+    fclose(fpu);
 	do {
 		printf("\nPlease choose an option:\n1) Register an account\n2) Login\n3) Search for books\n4) Display all books\n5) Quit\n Option: ");
 		option = optionChoice();
         switch (option) {
 			case 1:
-				register_(hu);
+				//register_(hu);
 				break;
 			case 2:
 				login(h,hu,bl);
@@ -160,8 +192,6 @@ void library_menu() {
     FILE *fpuc=fopen("users.txt","w+");
     store_user(fpuc,hu);
     fclose(fpuc);
-    free(h);
-    free(hu);
     printf("\nThank you for using the library!\nGoodbye!");
 	return;
 }

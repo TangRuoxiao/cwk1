@@ -20,13 +20,14 @@ int load_user(FILE *file,User *h)
         char * password=(char*) malloc(sizeof(char));
         sscanf(buf, "%s %s %d", username, password, numborrowed);
         p->password=password;p->username=username;p->numborrowed=numborrowed;
-        for ( int u = 0; u < p->numborrowed; u++)
+        /*for ( int u = 0; u < p->numborrowed; u++)
         {
             sscanf(file,"%d",&p->borrowed[u]);
         }
+        */
         last->next=p;
         last=p;
-        }
+    }
     last->next=NULL;
     
     for (p=h->next;p;p=p->next)

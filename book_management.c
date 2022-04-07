@@ -1,4 +1,5 @@
 #include "book_management.h"
+#include <stdio.h>
 #include<string.h>
 #include <stdlib.h>
 #define CreateNode(p) p=(Book *)malloc(sizeof(Book));
@@ -36,7 +37,7 @@ int load_books(FILE *file,Book *h)
         char * title=(char*) malloc(sizeof(char));
         sscanf(buf,"%d %s %s %d %d",&id,title,authors,&year,&copies);
         p->id=id;p->title=title;p->authors=authors;p->year=year;p->copies=copies;
-
+        
         last->next=p;
         last=p;
         }
@@ -48,14 +49,23 @@ int load_books(FILE *file,Book *h)
 int add_book(Book *h){
     Book *p;
     CreateNode(p);
+    char buf[50];
     printf("Enter the title of the book you wish to add: ");
-    scanf("%s",p->title);
+    memset(buf, '\0', 50);
+    scanf("%s",buf);
+    p->title= (char *)malloc(sizeof(strlen(buf)));
+    strcpy(p->title, buf);
     printf("Enter the author of the book you wish to add: ");
-    scanf("%s",p->authors);
+    memset(buf, '\0', 50);
+    scanf("%s",buf);
+    p->authors= (char *)malloc(sizeof(strlen(buf)));
+    strcpy(p->authors, buf);
     printf("Enter the year of the book you wish to add was released: ");
-    scanf("%d",p->year);
+    scanf("%d",&p->year);
+    getchar();
     printf("Enter the number of copies of the book you wish to add: ");
-    scanf("%d",p->copies);
+    scanf("%d",&p->copies);
+    getchar();
     p->next=NULL;
     Book *q;
     q=h;
@@ -91,53 +101,43 @@ int remove_book(Book *h){
 }
 
 BookList find_book_by_title(const char *title, Book *h) {
-    BookList bookList;
-    bookList.list = (Book *) malloc(sizeof(Book));
-    bookList.length = 0;
-    Book *l = h->next;
-    while (l) {
-        if (strcmp(title, l->title) == 0) {
-            *(bookList.list + bookList.length) = *l;
-            bookList.length += 1;
-        }
-        l = l->next;
-
+    Book *p;
+    BookList bl;
+    bl.length = 0;
+    CreateNode(bl.list)
+    for (p = h->next;p!=NULL;p=p->next) {
+        if (strcmp(title, p->title) == 0) {
+            *(bl.list + bl.length) = *p;
+            bl.length ++;}
     }
-    return bookList;
+    return bl;
 }
 
 BookList find_book_by_author(const char *author, Book *h) {
-    BookList bookList;
-    bookList.list = (Book *) malloc(sizeof(Book));
-    bookList.length = 0;
-    Book *l = h->next;
-    while (l) {
-        if (strcmp(author, l->authors) == 0) {
-            *(bookList.list + bookList.length) = *l;
-            bookList.length += 1;
-        }
-        l = l->next;
-
+    Book *p;
+    BookList bl;
+    bl.length = 0;
+    CreateNode(bl.list)
+    for (p = h->next;p!=NULL;p=p->next) {
+        if (strcmp(author, p->authors) == 0) {
+            *(bl.list + bl.length) = *p;
+            bl.length ++;}
     }
-    return bookList;
+    return bl;
 
 }
 
 BookList find_book_by_year(unsigned int year, Book *h) {
-
-    BookList bookList;
-    bookList.list = (Book *) malloc(sizeof(Book));
-    bookList.length = 0;
-    Book *l = h->next;
-    while (l) {
-        if (year == l->year) {
-            *(bookList.list + bookList.length) = *l;
-            bookList.length += 1;
-        }
-        l = l->next;
-
+    Book *p;
+    BookList bl;
+    bl.length = 0;
+    CreateNode(bl.list)
+    for (p = h->next;p!=NULL;p=p->next) {
+        if (p->year==year) {
+            *(bl.list + bl.length) = *p;
+            bl.length ++;}
     }
-    return bookList;
+    return bl;
 
 
 }
