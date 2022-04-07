@@ -44,7 +44,7 @@ int load_books(FILE *file,Book *h)
 
         last->next=NULL;
         return 0;
-}
+} 
 
 int add_book(Book *h){
     Book *p;
