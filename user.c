@@ -6,6 +6,7 @@
 void user_menu(char username[50],Book *h,BookList bl)
 {
     int option;
+    //start
 	do {
 		printf("\n(logged in as: %s)\nPlease choose an option:\n1) Borrow a book\n2) Return a book\n3) Search for books\n4) Display all books\n5) Log out\n Option: ",username);
 		option = optionChoice();

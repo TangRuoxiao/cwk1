@@ -1,5 +1,5 @@
 EXE = ./exe
-SRC= main.c library.c librarian.c user.c utility.c book_management.c user_management.c 
+SRC= main.c library.c librarian.c user.c utility.c book_management.c
 CC=gcc
 CFLAGS= -std=c99 -Wall
 CLINK= 

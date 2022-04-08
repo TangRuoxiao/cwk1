@@ -4,8 +4,10 @@
 #include "utility.h"
 #include "library.h"
 int librarian_menu(Book *h,BookList bl)
-{
+{	
+	//option
     int option;
+	//CLI
 	do {
 		printf("\n(logged in as: librarian)\nPlease choose an option:\n1) Add a book\n2) Remove a book\n3) Search for books\n4) Display all books\n5) Log out\n Option: ");
 		option = optionChoice();
