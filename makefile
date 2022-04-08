@@ -19,5 +19,4 @@ library.o:   library.c user_management.h utility.h book_management.h librarian.h
 librarian.o: 	 librarian.c book_management.h utility.h library.h
 user.o:      user.c book_management.h utility.h library.h
 utility.o:   utility.c utility.h 
-user_management.o: user_management.c user_management.h
 book_management.o: book_management.c user_management.h

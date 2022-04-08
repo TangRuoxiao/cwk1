@@ -1,12 +1,17 @@
+#ifndef __USERS__H__
+#define __USERS__H__
 #include <stdio.h>
 
 typedef struct _User {
-	    char username;
-		char password;
-		int borrowed[15];
+	    char username[30];
+		char password[30];
+		int borrowed[20];
 		int numborrowed;
-		struct _User *next;
 }User;
 
-int load_user(FILE *file,User *h);
-int store_user(FILE *file,User *h);
+struct userslist{
+	struct _User list[100];
+	int num;
+};
+
+#endif

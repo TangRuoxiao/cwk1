@@ -1,8 +1,9 @@
+
 #include <stdio.h>
 #include "book_management.h"
 #include "utility.h"
 #include "library.h"
-void user_menu(char username,Book *h,User *hu,BookList bl)
+void user_menu(char username[50],Book *h,BookList bl)
 {
     int option;
 	do {
@@ -10,10 +11,10 @@ void user_menu(char username,Book *h,User *hu,BookList bl)
 		option = optionChoice();
         switch (option) {
 			case 1:
-				//borrow(username,h);
+				borrow(h);
 				break;
 			case 2:
-				//return_(username,h);
+				return_(h);
 				break;
 			case 3:
 				search(h,bl);
@@ -32,44 +33,4 @@ void user_menu(char username,Book *h,User *hu,BookList bl)
 	} while (option != 5);
 	return;
 }
-/*
-int borrow(char username,Book *h){
-    int id_borrowed;
-    printf("Enter the ID number of the book you wish to borrow: ");
-    scanf("%d",&id_borrowed);
-    if ()
-    {
-        printf("ID not found.");
-        return;
-    }
-    if ()
-    {
-        printf("Sorry, you already have a copy of this book on loan.");
-        return;
-    }
-    //处理信息
-    return;
-}
-int return_(){
-    int id_returned;
-    if ()
-    {
-        printf("You have not borrowed any book.");
-        return;
-    }
-    printf("Below is the list of Books you are currently borrowing:\n");
-    for ( i = 0; i < count; i++)
-    {
-        
-    }
-    printf("Enter the ID number of the book you wish to return: ");
-    scanf("%d",&id_returned);
-    if ()
-    {
-        printf("invalid id.");
-    }
-    //处理信息
-    printf("Returned book successfully!");
-    return;
-}
-*/
+
